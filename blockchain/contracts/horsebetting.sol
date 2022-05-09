@@ -22,4 +22,27 @@ contract Horsebetting is Ownable {
         addressToBets[payable(msg.sender)].push(_bet);
         horseToAddresses[_horseNumber].push(payable(msg.sender));
     }
+
+    // function distributeWinnings(uint8 _winningHorse) external onlyOwner {
+    //     uint256 betTotal = address(this).balance;
+    //     uint256 winningHorseBetTotalAmount = 0;
+    //     mapping(address => uint256) addressToBetAmount;
+
+    //     address[] winningBettors = horseToAddresses[_winningHorse];
+    // }
+
+    function _calculateWinningBetAmount(uint8 _winningHorse, address _bettor)
+        private
+        view
+        returns (uint256)
+    {
+        Bet[] memory winningBets = addressToBets[_bettor];
+        uint256 betAmount = 0;
+        for (uint256 i = 0; i < winningBets.length; i++) {
+            if (winningBets[i].horseNumber == _winningHorse) {
+                betAmount += winningBets[i].amount;
+            }
+        }
+        return betAmount;
+    }
 }
